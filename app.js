@@ -1,0 +1,3 @@
+async function api(url,options={}){const r=await fetch(url,{credentials:'same-origin',...options});const d=await r.json().catch(()=>({detail:'Unexpected server response'}));if(!r.ok)throw new Error(d.detail||'Request failed');return d}
+function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[c]))}
+async function updateAuthLink(){const l=document.getElementById('auth-link');if(!l)return;try{await api('/session-info');l.textContent='Logout';l.href='#';l.onclick=async e=>{e.preventDefault();await api('/logout',{method:'POST'});location.href='/'} }catch{l.textContent='Login';l.href='/login'}}updateAuthLink();
